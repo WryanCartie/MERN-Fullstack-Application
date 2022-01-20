@@ -1,0 +1,20 @@
+{
+  "files": {
+    ".replit": [
+      {
+        "id": "37c1a7c5-29f8-4ff9-98f9-9bcf2f63410b",
+        "line": 2,
+        "version": 2,
+        "index": 20
+      }
+    ],
+    "src/shared/components/FormElements/Input.js": [
+      {
+        "id": "ce3aaea5-4ef7-4d3e-89ef-22e9f30275c2",
+        "line": 37,
+        "version": 298,
+        "index": 784
+      }
+    ]
+  }
+}
