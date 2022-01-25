@@ -75,7 +75,7 @@ const UpdatePlace = (props) =>{
       </div>
     )
   }else{
-    console.log(formState)
+
   }
 
   return(
