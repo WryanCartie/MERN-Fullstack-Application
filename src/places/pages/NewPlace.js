@@ -1,36 +1,34 @@
-import React, { useCallback, useReducer } from 'react';
+import React, { useCallback, useReducer } from "react";
 
-import Input from '../../shared/components/FormElements/Input';
-import Button from '../../shared/components/FormElements/Button';
-import useForm from '../../shared/hooks/form-hooks';
+import Input from "../../shared/components/FormElements/Input";
+import Button from "../../shared/components/FormElements/Button";
+import useForm from "../../shared/hooks/form-hooks";
 import {
   VALIDATOR_REQUIRE,
-  VALIDATOR_MINLENGTH
-} from '../../shared/util/validators';
-import './PlaceForm.css';
-
-
+  VALIDATOR_MINLENGTH,
+} from "../../shared/util/validators";
+import "./PlaceForm.css";
 
 const NewPlace = () => {
-   const [formState,inputHandler] =  useForm ({
-    
+  const [formState, inputHandler] = useForm(
+    {
       title: {
-        value: '',
-        isValid: false
+        value: "",
+        isValid: false,
       },
       description: {
-        value: '',
-        isValid: false
+        value: "",
+        isValid: false,
       },
       address: {
-        value: '',
-        isValid: false
-      }
+        value: "",
+        isValid: false,
+      },
     },
-     false );
+    false
+  );
 
-
-  const placeSubmitHandler = event => {
+  const placeSubmitHandler = (event) => {
     event.preventDefault();
     console.log(formState.inputs); // send this to the backend!
   };
@@ -54,7 +52,7 @@ const NewPlace = () => {
         errorText="Please enter a valid description (at least 5 characters)."
         onInput={inputHandler}
       />
-         <Input
+      <Input
         id="address"
         element="input"
         type="text"
@@ -63,7 +61,7 @@ const NewPlace = () => {
         errorText="Please enter a valid address."
         onInput={inputHandler}
       />
-  
+
       <Button type="submit" disabled={!formState.isValid}>
         ADD PLACE
       </Button>

@@ -6,9 +6,9 @@
   padding: 0;
 }
 
-.map-container{
+.map-container {
   height: 20rem;
-  width:100%;
+  width: 100%;
 }
 .place-item__info {
   padding: 1rem;
@@ -55,5 +55,5 @@
 @media (min-width: 768px) {
   .place-item__image {
     height: 20rem;
-  } 
+  }
 }
