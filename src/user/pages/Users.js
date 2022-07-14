@@ -14,12 +14,14 @@ const Users = () => {
     const sendRequest = async ()=>{
       setLoading(true)
       try{
-        const response = await fetch('http//localhots:5000/api/users')
-        const responseData = response.json()
-        setLoadedUsers(responseData.users)
+        const response = await fetch('http://localhost:5000/api/users')
+        const responseData = await response.json()
+        console.log(responseData)
+
         if(!response.ok){
           throw new Error(responseData.messages)
         }
+        setLoadedUsers(responseData.users)
       }catch(err){
         setError(err.message)
 
@@ -28,7 +30,7 @@ const Users = () => {
       setLoading(false)
     }
     sendRequest();
-  })
+  },[])
 
   const errorHandler = () =>{
     setError(null);
@@ -43,7 +45,7 @@ const Users = () => {
           <LoadingSpinner/>
         </div>
       )}
-      {!isLoading && loadedUsers && <UsersList items={USERS} />}
+      {!isLoading && loadedUsers && <UsersList items={loadedUsers} />}
   </React.Fragment>
 
 
