@@ -1,16 +1,16 @@
-import {useState, useCallback,useRef} from 'react'
-import { useEffect } from 'react/cjs/react.production.min';
+import { useState, useCallback, useRef, useEffect } from 'react'
 
-export const useHttpClient = () =>{
-    const [isLoading, setLoading] = useState(false);
+
+export const useHttpClient = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState()
     const activeHttpRequest = useRef([])
-    const sendRequest =useCallback( async (url,method = 'GET',body= null, headers = {}) =>{
+    const sendRequest = useCallback(async (url, method = 'GET', body = null, headers = {}) => {
         setIsLoading(true)
         const httpAbortCtrl = new AbortController();
         activeHttpRequest.current.push(httpAbortCtrl)
-        try{
-            const response = await fetch(url,{
+        try {
+            const response = await fetch(url, {
                 method,
                 body,
                 headers,
@@ -18,30 +18,30 @@ export const useHttpClient = () =>{
             })
             const responseData = await response.json()
 
-            activeHttpRequest = activeHttpRequest.filter(requestCtrl => requestCtrl !== httpAbortCtrl)
+            activeHttpRequest.current = activeHttpRequest.current.filter(requestCtrl => requestCtrl !== httpAbortCtrl)
 
-            if(!response.ok){
+            if (!response.ok) {
                 throw Error(responseData.message)
             }
             setIsLoading(false)
             return responseData
-        }catch(error){
+        } catch (error) {
             setError(error.message)
             setIsLoading(false)
-            throw err
+            throw error
         }
-      
-    },[])
 
-    const clearError = () =>{
+    }, [])
+
+    const clearError = () => {
         setError(null);
     }
 
-    useEffect(()=>{
-        return () =>{
-            activeHttpRequest.current.forEach(abortCtrl=> abortCtrl.abort())
+    useEffect(() => {
+        return () => {
+            activeHttpRequest.current.forEach(abortCtrl => abortCtrl.abort())
         }
 
-    },[])
-    return isLoading,error,sendRequest,clearError
+    }, [])
+    return isLoading, error, sendRequest, clearError
 }
