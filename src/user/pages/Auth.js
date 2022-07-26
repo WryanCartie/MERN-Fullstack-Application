@@ -20,7 +20,7 @@ const Auth = () => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   
 
-  const[sendRequest,isLoading,error,clearError] = useHttpClient()
+  const{sendRequest,isLoading,error,clearError }= useHttpClient()
   const [formState, inputHandler, setFormData] = useForm(
     {
       email: {
