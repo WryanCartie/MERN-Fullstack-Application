@@ -74,7 +74,7 @@ const UpdatePlace = (props) => {
     }
 
     fetchPlace();
-  },[sendRequest,placeId])
+  },[sendRequest,placeId,setFormData])
 
 
 

@@ -26,6 +26,10 @@ const UserPlaces = () => {
     console.log('labena')
     fetchPlaces();
   }, [sendRequest, userId]);
+
+ const placeDeleteHandler = (deletedPlaceId) => {
+    setLoadedPlace(prevPlaces => prevPlaces.filter(place=> place.id != deletedPlaceId))
+  }
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
@@ -34,7 +38,7 @@ const UserPlaces = () => {
           <LoadingSpinner />
         </div>
       )}
-      {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} />}
+      {!isLoading && loadedPlaces && <PlaceList onDeletePlace={placeDeleteHandler} items={loadedPlaces} />}
     </React.Fragment>
   )
 };
