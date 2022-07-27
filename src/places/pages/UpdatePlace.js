@@ -1,35 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useHistory,useContext } from "react";
 import { useParams } from "react-router-dom";
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import useForm from "../../shared/hooks/form-hooks";
+import { AuthContext } from "../../shared/context/auth-context";
+import { useHttpClient } from '../../shared/hooks/http-hooks';
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
 import "./PlaceForm.css";
-const DUMMY_PLACES = [
-  {
-    id: "p1",
-    title: "Stockholm Palace",
-    description:
-      "Palace hosting the emperors and empresses of the Swedish Empire.",
-    imageUrl:
-      "https://media.istockphoto.com/photos/royal-palace-in-stockholm-hdr-picture-id641802618?k=20&m=641802618&s=612x612&w=0&h=axGbCNMymi9xavDpcmlXyPk8inWULfoWf3NIeF7PEkU=",
-    address: "Kungliga slottet, 107 70 Stockholm, Sweden",
-    location: {
-      lat: 59.3268,
-      lng: 18.0717,
-    },
-    creator: "u1",
-  },
-];
+
 
 const UpdatePlace = (props) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [loadedPlace, setLoadedPlace] = useState();
+  const history = useHistory();
+  const auth = useContext(AuthContext)
+  const {sendRequest,isLoading,error,clearError } = useHttpClient();
   const placeId = useParams().placeId;
 
-  const placeUpdateHandler = () => {};
+  const placeUpdateHandler = async(event) => {
+    event.preventDefault();
+    try{
+      await sendRequest(`http://localhost:5000/api/places/${placeId}`,
+      'PATCH',
+      JSON.stringify({
+        title: formState.inputs.title.value,
+        description: formState.inputs.description.value
+      }),
+      {
+        'Content-Type': 'application/json'
+      })
+      history.push(`/${auth.userId}/places`)
+    }catch(error){
+    }
+  };
   const [formState, inputHandler, setFormData] = useForm(
     {
       title: {
@@ -43,46 +50,52 @@ const UpdatePlace = (props) => {
     },
     false
   );
-  const identifiedPlace = DUMMY_PLACES.find((p) => p.id === placeId);
+  useEffect(()=>{
+    const fetchPlace = async () =>{
+      try{
+        const responseData = await sendRequest(`http://localhost:5000/api/places/${placeId}`)
+        setLoadedPlace(responseData.place)
+        setFormData(
+          {
+            title: {
+              value: responseData.place.title,
+              isValid: true,
+            },
+            description: {
+              value: responseData.place.description,
+              isValid: true,
+            },
+          },
+          true
+        );
+      }catch(err){
 
-  useEffect(() => {
-    if (identifiedPlace) {
-      setFormData(
-        {
-          title: {
-            value: identifiedPlace.title,
-            isValid: true,
-          },
-          description: {
-            value: identifiedPlace.description,
-            isValid: true,
-          },
-        },
-        true
-      );
+      }
     }
 
-    setIsLoading(false);
-  }, [setFormData, identifiedPlace]);
+    fetchPlace();
+  },[sendRequest,placeId])
 
-  if (!identifiedPlace) {
+
+
+
+
+  if (!loadedPlace) {
     return (
       <div className="center">
         <h2>Could not find place!!</h2>
       </div>
     );
   }
-  if (isLoading) {
-    return (
-      <div className="center">
-        <h2>Loading...</h2>
-      </div>
-    );
-  } else {
-  }
+
 
   return (
-    <form className="place-form">
+    <React.Fragment>
+        <ErrorModal error={error} onClear={clearError}/>
+        {isLoading && <LoadingSpinner asOverlay />}
+
+      { !isLoading && loadedPlace &&
+        <form className="place-form">
       <Input
         id="title"
         element="input"
@@ -91,7 +104,7 @@ const UpdatePlace = (props) => {
         validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter a valid title !!"
         onInput={inputHandler}
-        initialValue={formState.inputs.title.value}
+        initialValue={loadedPlace.title}
         initialValid={formState.inputs.title.isValid}
       />
       <Input
@@ -112,6 +125,9 @@ const UpdatePlace = (props) => {
         UPDATE PLACE
       </Button>
     </form>
+}
+    </React.Fragment>
+    
   );
 };
 
