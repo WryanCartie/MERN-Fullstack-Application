@@ -12,7 +12,8 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 const UserPlaces = () => {
   const userId = useParams().userId;
   console.log(userId)
-  const {sendRequest,isLoading,error,clearError} = useHttpClient
+  
+  const {sendRequest,isLoading,error,clearError} = useHttpClient()
   const[loadedPlaces,setLoadedPlace] = useState([]);
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -21,14 +22,17 @@ const UserPlaces = () => {
           `http://localhost:5000/api/places/user/${userId}`
         );
         setLoadedPlace(responseData.places);
-      } catch (err) {}
+      } catch (err) {
+        console.log()
+
+      }
     };
-    console.log('labena')
+  
     fetchPlaces();
   }, [sendRequest, userId]);
 
  const placeDeleteHandler = (deletedPlaceId) => {
-    setLoadedPlace(prevPlaces => prevPlaces.filter(place=> place.id != deletedPlaceId))
+    setLoadedPlace(prevPlaces => prevPlaces.filter(place=> place.id !== deletedPlaceId))
   }
   return (
     <React.Fragment>

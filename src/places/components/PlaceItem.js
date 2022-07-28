@@ -16,9 +16,15 @@ const PlaceItem = (props) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const{sendRequest,isLoading,error,clearError} = useHttpClient();
 
-  const openMapHandler = () => setShowMap(true);
+  const openMapHandler = (evt) =>{
+    evt.preventDefault()
+    setShowMap(true);
+  } 
 
-  const closeMapHandler = () => setShowMap(false);
+  const closeMapHandler = (evt) => {
+    evt.preventDefault()
+    setShowMap(false);
+  }
 
   const showDeleteWarningHandler = () => {
     setShowConfirmModal(true);
@@ -38,6 +44,7 @@ const PlaceItem = (props) => {
   };
 
   const cancelDeleteHandler = (evt) => {
+    evt.preventDefault();
     setShowConfirmModal(false);
   };
 

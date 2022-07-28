@@ -53,6 +53,7 @@ const useForm = (initialInputs, initialFormValidity) => {
       inputs: inputData,
       formIsValid: formValidity,
     });
+    
   }, []);
 
   return [formState, inputHandler, setFormData];
