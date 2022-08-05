@@ -33,7 +33,8 @@ export const useHttpClient = () =>{
       
     },[])
 
-    const clearError = () =>{
+    const clearError = (evt) =>{
+        evt.preventDefault();
         setError(null);
     }
 
