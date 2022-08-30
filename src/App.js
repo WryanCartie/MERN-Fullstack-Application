@@ -13,19 +13,19 @@ import NewPlace from "./places/pages/NewPlace";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import UserPlaces from "./places/pages/UserPlaces";
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token,setToken] = useState(false);
   const [userId, setUserId] = useState(null)
-  const login = useCallback((uid) => {
-    setIsLoggedIn(true);
+  const login = useCallback((uid,token) => {
+    setToken(token)
     setUserId(uid);
   }, []);
-  const logout = useCallback(() => {
-    setIsLoggedIn(false);
+  const logout = useCallback(( ) => {
+    setToken(null)
     setUserId(null);
   }, []);
 
   let routes;
-  if (isLoggedIn) {
+  if (token) {
     routes = (
       <Switch>
         <Route path="/" exact>
@@ -65,8 +65,10 @@ const App = () => {
       value={{
         login: login,
         logout: logout,
-        isLoggedIn: isLoggedIn,
-        userId: userId
+        isLoggedIn: !!token,
+        userId: userId,
+        token: token
+      
       }}
     >
       <Router>
