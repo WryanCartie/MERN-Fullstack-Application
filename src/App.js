@@ -13,15 +13,19 @@ import NewPlace from "./places/pages/NewPlace";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import UserPlaces from "./places/pages/UserPlaces";
 import { useEffect } from "react/cjs/react.production.min";
+
+let logoutTimer;
 const App = () => {
   const [token, setToken] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [expirationTimer, setExpirationTimer] = useState();
   const login = useCallback((uid, token, expirationDate) => {
     setToken(token);
     setUserId(uid);
     let tokenExpirationDate =
       expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
 
+    setExpirationTimer(tokenExpirationDate);
     localStorage.setItem(
       "userData",
       JSON.stringify({
@@ -34,6 +38,8 @@ const App = () => {
   const logout = useCallback(() => {
     setToken(null);
     setUserId(null);
+    localStorage.removeItem('userData')
+    setExpirationTimer(null);
   }, []);
 
   useEffect(() => {
@@ -46,6 +52,13 @@ const App = () => {
       login(storedData.userId, storedData.token);
     }
   }, [login]);
+  useEffect(() => {
+    if (token && expirationTimer) {
+      logoutTimer = setTimeout(logout, tokenExpirationDate.getTime() - new Date().getTime());
+    }else{
+      clearTimeout(logoutTimer);
+    }
+  }, [token, logout, tokenExpirationDate]);
 
   let routes;
   if (token) {
