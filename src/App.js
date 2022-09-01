@@ -12,21 +12,40 @@ import Users from "./user/pages/Users";
 import NewPlace from "./places/pages/NewPlace";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import UserPlaces from "./places/pages/UserPlaces";
+import { useEffect } from "react/cjs/react.production.min";
 const App = () => {
-  const [token,setToken] = useState(false);
-  const [userId, setUserId] = useState(null)
-  const login = useCallback((uid,token) => {
-    setToken(token)
+  const [token, setToken] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const login = useCallback((uid, token, expirationDate) => {
+    setToken(token);
     setUserId(uid);
-    localStorage.setItem('userData',JSON.stringify({
-      userId: uid,
-      token: token
-    }))
+    let tokenExpirationDate =
+      expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({
+        userId: uid,
+        token: token,
+        expiration: tokenExpirationDate.toISOString(),
+      })
+    );
   }, []);
-  const logout = useCallback(( ) => {
-    setToken(null)
+  const logout = useCallback(() => {
+    setToken(null);
     setUserId(null);
   }, []);
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("userData"));
+    if (
+      storedData &&
+      storedData.token &&
+      new Date(storedData.expiration) > new Date()
+    ) {
+      login(storedData.userId, storedData.token);
+    }
+  }, [login]);
 
   let routes;
   if (token) {
@@ -71,8 +90,7 @@ const App = () => {
         logout: logout,
         isLoggedIn: !!token,
         userId: userId,
-        token: token
-      
+        token: token,
       }}
     >
       <Router>
