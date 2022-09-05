@@ -85,18 +85,20 @@ const Auth = () => {
       } catch (err) {}
     } else {
       try {
-        const formData = new FormData()
-        formData.append('email',formState.inputs.email.value)
-        formData.append('name',formState.inputs.name.value)
-        formData.append('password',formState.inputs.password.value)
-        formData.append('image',formState.inputs.imeage.value)
+        const formData = new FormData();
+        console.log(formState);
+        formData.append('email', formState.inputs.email.value);
+        formData.append('name', formState.inputs.name.value);
+        formData.append('password', formState.inputs.password.value);
+        formData.append('image', formState.inputs.image.value);
         const responseData = await sendRequest(
           'http://localhost:5000/api/users/signup',
           'POST',
           formData
+        
         );
 
-        auth.login(responseData.userId,responseData.token);
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {}
     }
   };

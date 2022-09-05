@@ -1,57 +1,59 @@
-import React, { useEffect, useRef,useState } from "react";
+import React, { useRef, useState, useEffect } from 'react';
 
-import Button from "./Button";
+import Button from './Button';
+import './ImageUpload.css';
 
-import "./ImageUpload.css";
+const ImageUpload = props => {
+  const [file, setFile] = useState();
+  const [previewUrl, setPreviewUrl] = useState();
+  const [isValid, setIsValid] = useState(false);
 
-const ImageUpload = (props) => {
   const filePickerRef = useRef();
-  const[file,setFile] = useState(null)
-  const[previewUrl,setPreviewUrl] = useState(null)
-  const[isValid,setIsValid] = useState(false)
+
+  useEffect(() => {
+    if (!file) {
+      return;
+    }
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      setPreviewUrl(fileReader.result);
+    };
+    fileReader.readAsDataURL(file);
+  }, [file]);
+
+  const pickedHandler = event => {
+    let pickedFile;
+    let fileIsValid = isValid;
+    if (event.target.files && event.target.files.length === 1) {
+      pickedFile = event.target.files[0];
+      setFile(pickedFile);
+      setIsValid(true);
+      fileIsValid = true;
+    } else {
+      setIsValid(false);
+      fileIsValid = false;
+    }
+    props.onInput(props.id, pickedFile, fileIsValid);
+  };
+
   const pickImageHandler = () => {
     filePickerRef.current.click();
   };
 
-  const filePickedHandler = (evt) => {  
-   let fileIsValid = isValid
-   let pickedFile = evt.target.files[0];
-    if(evt.target.files && evt.target.files.length === 1){
-        let pickedFile = evt.target.files[0];
-        fileIsValid = true
-        setIsValid(true)
-        setFile(pickedFile)
-    }else{
-        setIsValid(false)
-    }
-    props.onInput(props.id,pickedFile,fileIsValid)
-  };
-
-  useEffect(()=>{
-    if(!file){
-        return
-    }
-    const fileReader = new FileReader();
-    fileReader.onload = ()=>{
-        setPreviewUrl(fileReader.result)
-    }
-    fileReader.readAsDataURL(file)
-  },[file])
-
   return (
     <div className="form-control">
       <input
-        ref={filePickerRef}
         id={props.id}
-        onChange={filePickedHandler}
-        style={{display: 'none' }}
+        ref={filePickerRef}
+        style={{ display: 'none' }}
         type="file"
-        accept="jpg,png,jpeg"
+        accept=".jpg,.png,.jpeg"
+        onChange={pickedHandler}
       />
-      <div className={`image-upload ${props.center && "center"}`}>
+      <div className={`image-upload ${props.center && 'center'}`}>
         <div className="image-upload__preview">
-          {previewUrl &&<img src={previewUrl} alt="PREVIEW" />}
-          {!previewUrl && <p>Please upload an image!</p>}
+          {previewUrl && <img src={previewUrl} alt="Preview" />}
+          {!previewUrl && <p>Please pick an image.</p>}
         </div>
         <Button type="button" onClick={pickImageHandler}>
           PICK IMAGE

@@ -1,4 +1,4 @@
-import {useState,useCallback} from 'react'
+import {useState,useCallback,useEffect} from 'react'
 
 let logoutTimer;
 
@@ -41,11 +41,11 @@ export const useAuth = ()=>{
     }, [login]);
     useEffect(() => {
       if (token && expirationTimer) {
-        logoutTimer = setTimeout(logout, tokenExpirationDate.getTime() - new Date().getTime());
+        logoutTimer = setTimeout(logout, expirationTimer.getTime() - new Date().getTime());
       }else{
         clearTimeout(logoutTimer);
       }
-    }, [token, logout, tokenExpirationDate]);
+    }, [token, logout, expirationTimer]);
     
     return{token,login,logout,userId}
 }

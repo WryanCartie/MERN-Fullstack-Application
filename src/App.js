@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -13,9 +13,8 @@ import Users from "./user/pages/Users";
 import NewPlace from "./places/pages/NewPlace";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import UserPlaces from "./places/pages/UserPlaces";
-import { useEffect } from "react/cjs/react.production.min";
 
-let logoutTimer;
+
 const App = () => {
   const{token,login,logout,userId} = useAuth()
  

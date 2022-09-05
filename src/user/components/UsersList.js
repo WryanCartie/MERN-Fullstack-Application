@@ -1,10 +1,15 @@
-import React from "react";
+import React,{useEffect} from "react";
 
 import UserItem from "./UserItem";
 import Card from "../../shared/components/UIElements/Card";
 import "./UsersList.css";
 
+
 const UsersList = (props) => {
+
+  useEffect(()=>{
+    console.log(props)
+  },[])
   if (props.items.length === 0) {
     return (
       <div className="center">

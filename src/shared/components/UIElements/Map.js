@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
 import "./Map.css";
-import Modal from "./Modal";
 
 const Map = (props) => {
   const mapRef = useRef();
