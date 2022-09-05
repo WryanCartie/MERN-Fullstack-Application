@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect,useState, useContext } from "react";
 import Button from "../../shared/components/FormElements/Button";
 import { AuthContext } from "../../shared/context/auth-context";
 import "./PlaceItem.css";
@@ -10,12 +10,16 @@ import Map from "../../shared/components/UIElements/Map";
 import { useHttpClient } from "../../shared/hooks/http-hooks";
 
 
+
 const PlaceItem = (props) => {
   const auth = useContext(AuthContext);
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const{sendRequest,isLoading,error,clearError} = useHttpClient();
 
+  useEffect(()=>{
+    console.log(props)
+  },[props])
   const openMapHandler = (evt) =>{
     evt.preventDefault()
     setShowMap(true);
@@ -33,10 +37,12 @@ const PlaceItem = (props) => {
   const confirmDeleteHandler = async (evt) => {
     evt.preventDefault();
     setShowConfirmModal(false);
+  
+
     try{
       await sendRequest(`http://localhost:5000/api/places/${props.id}`,
-      'DELETE',
-      {Authorization: 'Bearer '+auth.token}
+      'DELETE',null,
+      {Authorization: 'Bearer '+ auth.token}
       )
       props.onDelete(props.id)
     }catch(err){
@@ -90,7 +96,7 @@ const PlaceItem = (props) => {
         {isLoading && <LoadingSpinner asOverlay/>　}
         <Card className="place-item__content">
           <div className="place-item__image">
-            <img src={`http://localhost/${props.image}`} alt={props.title} />
+            <img src={`http://localhost:5000/${props.image}`} alt={props.title} />
           </div>
           <div className="place-item__info">
             <h2>{props.title}</h2>

@@ -7,9 +7,6 @@ import "./UsersList.css";
 
 const UsersList = (props) => {
 
-  useEffect(()=>{
-    console.log(props)
-  },[])
   if (props.items.length === 0) {
     return (
       <div className="center">

@@ -23,7 +23,7 @@ const UserPlaces = () => {
         );
         setLoadedPlace(responseData.places);
       } catch (err) {
-        console.log()
+        console.log(err)
 
       }
     };

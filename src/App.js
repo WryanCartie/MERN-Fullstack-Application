@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -17,7 +17,9 @@ import UserPlaces from "./places/pages/UserPlaces";
 
 const App = () => {
   const{token,login,logout,userId} = useAuth()
- 
+  useEffect(()=>{
+    console.log(userId)
+  },[userId])
 
   let routes;
   if (token) {
@@ -26,7 +28,7 @@ const App = () => {
         <Route path="/" exact>
           <Users />
         </Route>
-        <Route path="/:userId/places" exact>
+        <Route path="/:userId/places"exact>
           <UserPlaces />
         </Route>
         <Route path="/places/new" exact>
