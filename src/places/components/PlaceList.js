@@ -5,6 +5,8 @@ import Button from "../../shared/components/FormElements/Button";
 
 import PlaceItem from "./PlaceItem";
 
+import './PlaceList.css'
+
 const PlaceList = (props) => {
   if (props.items.length === 0) {
     return (
