@@ -1,4 +1,4 @@
-import React, { useEffect,useState, useContext } from "react";
+import React, {useState, useContext } from "react";
 import Button from "../../shared/components/FormElements/Button";
 import { AuthContext } from "../../shared/context/auth-context";
 import "./PlaceItem.css";
@@ -17,9 +17,6 @@ const PlaceItem = (props) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const{sendRequest,isLoading,error,clearError} = useHttpClient();
 
-  useEffect(()=>{
-    console.log(props)
-  },[props])
   const openMapHandler = (evt) =>{
     evt.preventDefault()
     setShowMap(true);

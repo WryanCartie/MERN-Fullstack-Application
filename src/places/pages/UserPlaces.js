@@ -11,7 +11,6 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
 const UserPlaces = () => {
   const userId = useParams().userId;
-  console.log(userId)
   
   const {sendRequest,isLoading,error,clearError} = useHttpClient()
   const[loadedPlaces,setLoadedPlace] = useState([]);
@@ -24,7 +23,6 @@ const UserPlaces = () => {
         setLoadedPlace(responseData.places);
       } catch (err) {
         console.log(err)
-
       }
     };
   

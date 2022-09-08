@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -17,9 +17,6 @@ import UserPlaces from "./places/pages/UserPlaces";
 
 const App = () => {
   const{token,login,logout,userId} = useAuth()
-  useEffect(()=>{
-    console.log(userId)
-  },[userId])
 
   let routes;
   if (token) {
