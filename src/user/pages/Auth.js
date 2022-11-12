@@ -76,15 +76,13 @@ const Auth = () => {
           JSON.stringify({
             email: formState.inputs.email.value,
             password: formState.inputs.password.value
-          }),
-          {
-            'Content-Type': 'application/json'
-          }
+          })
         );
         auth.login(responseData.userId,responseData.token);
       } catch (err) {}
     } else {
       try {
+     
         const formData = new FormData();
         formData.append('email', formState.inputs.email.value);
         formData.append('name', formState.inputs.name.value);

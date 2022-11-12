@@ -41,8 +41,7 @@ export const useHttpClient = () => {
     []
   );
 
-  const clearError = (evt) => {
-    evt.preventDefault();
+  const clearError = () => {
     setError(null);
   };
 
